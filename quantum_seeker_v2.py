@@ -53,136 +53,97 @@ logging.basicConfig(
 LOGGER = logging.getLogger("quantum_seeker")
 
 
-ULTRA_RARE_BET_CATEGORIES: Dict[str, List[str]] = {
-    "NATIONAL_ANTHEM_PROPERTIES": [
-        "ANTHEM_DURATION_OVER_UNDER",
-        "ANTHEM_FIRST_WORD",
-        "ANTHEM_KEY_SIGNATURE",
-        "ANTHEM_VIBRATO_COUNT",
-        "ANTHEM_FINAL_NOTE_DURATION",
-        "ANTHEM_PERFORMER_EYE_CONTACT_WITH_CAMERA",
-        "ANTHEM_MICROPHONE_TYPE",
-        "ANTHEM_FLAG_REVEAL_TIMING",
+REAL_SB_PROP_CATEGORIES: Dict[str, List[str]] = {
+    "COIN_TOSS": [
+        "COIN_TOSS_HEADS_TAILS",
+        "COIN_TOSS_WINNER_DEFERS",
+        "COIN_TOSS_WINNER_RECEIVES",
     ],
-    "HALFTIME_ESOTERICA": [
-        "HALFTIME_STAGE_CONFIGURATION",
-        "HALFTIME_PYROTECHNIC_COLOR_RATIO",
-        "HALFTIME_COSTUME_CHANGE_COUNT",
-        "HALFTIME_WARDROBE_MALFUNCTION",
-        "HALFTIME_LIP_SYNC_ACCURACY",
-        "HALFTIME_CELEBRITY_GUEST_APPEARANCE_COUNT",
-        "HALFTIME_DRONE_FORMATION_COMPLEXITY",
-        "HALFTIME_LASER_ANGLE_VARIANCE",
+    "NATIONAL_ANTHEM": [
+        "ANTHEM_DURATION_OVER_UNDER_95",
+        "ANTHEM_DURATION_OVER_UNDER_100",
+        "ANTHEM_DURATION_OVER_UNDER_105",
     ],
-    "GATORADE_ONTOLOGY": [
-        "GATORADE_COLOR_PRIMARY",
-        "GATORADE_COLOR_SECONDARY",
-        "GATORADE_VISCOSITY",
-        "GATORADE_CONTAINMENT_METHOD",
-        "GATORADE_SPLASH_RADIUS",
-        "GATORADE_TEMPERATURE",
-        "GATORADE_DILUTION_RATIO",
-        "GATORADE_BRAND_VISIBILITY",
+    "GATORADE_SHOWER": [
+        "GATORADE_COLOR_ORANGE",
+        "GATORADE_COLOR_YELLOW",
+        "GATORADE_COLOR_BLUE",
+        "GATORADE_COLOR_CLEAR",
+        "GATORADE_COLOR_RED",
+        "GATORADE_COLOR_GREEN",
+        "GATORADE_COLOR_PURPLE",
+        "GATORADE_COLOR_NONE",
     ],
-    "COIN_TOSS_QUANTUM": [
-        "COIN_TOSS_OUTCOME",
-        "COIN_TOSS_AIR_TIME",
-        "COIN_TOSS_ROTATION_COUNT",
-        "COIN_TOSS_CAPTAIN_DECISION_DELAY",
-        "COIN_TOSS_REFEREE_EYE_CONTACT",
-        "COIN_TOSS_COIN_ORIENTATION_AT_CATCH",
-        "COIN_TOSS_WIND_INTERFERENCE",
-        "COIN_TOSS_MINT_YEAR_OF_COIN",
+    "GAME_OUTCOME": [
+        "GAME_OVERTIME_YES",
+        "GAME_OVERTIME_NO",
+        "GAME_SAFETY_YES",
+        "GAME_SAFETY_NO",
+        "GAME_MISSED_XP",
+        "GAME_SUCCESSFUL_2PT",
     ],
-    "MATHEMATICAL_CURIOSITIES": [
-        "SCORING_SEQUENCE_FIBONACCI_ADHERENCE",
-        "PRIME_NUMBER_SCORES",
-        "PALINDROMIC_TIME_OF_SCORE",
-        "GEOMETRIC_PROGRESSION_OF_TURNOVERS",
-        "BENFORD_LAW_COMPLIANCE_OF_YARDAGE_STATS",
-        "GOLDEN_RATIO_APPEARANCE_IN_PLAY_DISTRIBUTION",
-        "SYMMETRY_IN_PENALTY_ASSESSMENT",
-        "PI_DIGIT_SEQUENCE_IN_PLAY_CLOCK",
+    "SCORING": [
+        "FIRST_SCORE_TD",
+        "FIRST_SCORE_FG",
+        "FIRST_SCORE_SAFETY",
+        "LAST_SCORE_TD",
+        "LAST_SCORE_FG",
+        "LONGEST_TD_OVER_UNDER_45",
     ],
-    "PSYCHIC_PHENOMENA": [
-        "COACH_PRE_GAME_INTERVIEW_KEYWORD_FREQUENCY",
-        "QUARTERBACK_DREAM_REVELATION_PRE_GAME",
-        "PLAYER_PRE_GAME_MEAL_SUPERSTITION",
-        "COACHING_STAFF_LUCKY_ITEM_VISIBILITY",
-        "PLAYER_ENTRY_TUNNEL_ORDER_CONSISTENCY",
-        "STADIUM_GHOST_LEGEND_MENTION_COUNT",
-        "RETIRED_NUMBER_TRIBUTE_TIMING",
-        "MASCOT_INTERACTION_WITH_OPPOSING_PLAYER",
+    "SPECIAL_TEAMS": [
+        "TOTAL_FGS_OVER_UNDER_3",
+        "LONGEST_FG",
+        "TOTAL_PUNTS",
+        "BLOCKED_KICK",
+        "KICKOFF_RETURN_TD",
     ],
-    "ASTROLOGICAL_ALIGNMENTS": [
-        "QUARTERBACK_ZODIAC_SIGN_COMPATIBILITY",
-        "MOON_PHASE_EFFECT_ON_KICKERS",
-        "MERCURY_RETROGRADE_TIMING",
-        "PLAYER_BIRTH_PLACE_LATITUDE_CORRELATION",
-        "STADIUM_AXIS_ALIGNMENT",
-        "GAME_START_SOLAR_FLARE_ACTIVITY",
-        "ZODIAC_ELEMENT_BALANCE_IN_STARTING_LINEUP",
-        "PLANETARY_RETROGRADE_COUNT_AT_KICKOFF",
+    "TURNOVERS": [
+        "TOTAL_TURNOVERS",
+        "DEFENSIVE_TD",
+        "PICK_SIX",
+        "INTERCEPTIONS",
+        "FUMBLES",
     ],
-    "QUANTUM_ENTANGLEMENT_PROPS": [
-        "TWIN_PLAYERS_TELEPATHIC_CONNECTION",
-        "FORMER_TEAMMATES_NOW_OPPONENTS_REACTION",
-        "COACH_PROTEGE_RELATIONSHIP_DYNAMIC",
-        "SIBLING_RIVALRY_INTENSITY",
-        "HOMETOWN_HERO_PRESSURE_INDEX",
-        "DRAFT_DAY_SWAP_REVENGE_NARRATIVE",
-        "COLLEGE_ROOMMATE_REUNION",
-        "FREE_AGENCY_REVENGE_GAME",
+    "MVP_POSITION": [
+        "MVP_QB",
+        "MVP_RB",
+        "MVP_WR",
+        "MVP_TE",
+        "MVP_DEFENSIVE",
+        "MVP_KICKER",
     ],
-    "NEUROAESTHETIC_PROPS": [
-        "UNIFORM_COLOR_PSYCHOLOGY_EFFECT",
-        "END_ZONE_DESIGN_COMPLEXITY",
-        "HELMET_REFLECTIVITY_INDEX",
-        "PLAYER_CELEBRATION_CHOREOGRAPHY_SYNC",
-        "SIDELINE_HEATER_USAGE_VISIBILITY",
-        "COACHING_STAFF_TABLET_COLOR_UNIFORMITY",
-        "PLAYER_EYEBLACK_DESIGN_UNIQUENESS",
-        "SHOE_CUSTOMIZATION_VISIBILITY",
+    "HALFTIME_SHOW": [
+        "HALFTIME_FIRST_SONG",
+        "HALFTIME_SPECIAL_GUEST_YES",
+        "HALFTIME_SPECIAL_GUEST_NO",
+        "HALFTIME_OUTFIT_COLOR",
+        "HALFTIME_DURATION",
     ],
-    "BIOMETRIC_ANOMALIES": [
-        "PLAYER_SWEAT_RATE_VISIBILITY",
-        "HEART_RATE_SPIKE_VISIBLE_ON_CAMERA",
-        "BREATHING_PATTERN_CONSISTENCY_PRE_SNAP",
-        "PLAYER_HAIR_MOVEMENT_WIND_EFFECT",
-        "MUSCLE_FATIGUE_VISIBLE_QUARTER",
-        "HYDRATION_FREQUENCY_BY_POSITION",
-        "PLAYER_FOCUS_EYE_DILATION_VISIBILITY",
-        "ADJUSTMENT_TIMING_CONSISTENCY",
+    "PLAYER_PROPS_QB": [
+        "QB_PASS_YARDS",
+        "QB_TDS",
+        "QB_COMPLETIONS",
+        "QB_INTERCEPTIONS",
     ],
-    "TEMPORAL_PARADOX_PROPS": [
-        "SCORE_REPEAT_FROM_PREVIOUS_MEETING",
-        "QUARTERBACK_AGE_DIFFERENTIAL_EFFECT",
-        "FRANCHISE_HISTORY_WEIGHT_PRESSURE",
-        "COACHING_TREE_CONFLUENCE",
-        "PLAYER_NUMBER_SYNCHRONICITY",
-        "HISTORICAL_ANNIVERSARY_EFFECT",
-        "VENUE_FAMILIARITY_ADVANTAGE",
-        "WEATHER_DEJA_VU",
+    "PLAYER_PROPS_RB": [
+        "RB_RUSH_YARDS",
+        "RB_RUSH_TDS",
+        "RB_RECEPTIONS",
     ],
-    "TECHNOLOGICAL_GLITCH_PROPS": [
-        "JUMBOTRON_MALFUNCTION_TIMING",
-        "REPLAY_SYSTEM_FAILURE",
-        "MICROPHONE_FEEDBACK_INCIDENTS",
-        "VIRTUAL_ADS_MISALIGNMENT",
-        "STADIUM_WIFI_OUTAGE_DURATION",
-        "BROADCAST_AUDIO_DESYNC_OCCURRENCES",
-        "PLAYER_TRACKER_MALFUNCTION",
-        "DRONE_INTERFERENCE_INCIDENT",
+    "PLAYER_PROPS_WR": [
+        "WR_REC_YARDS",
+        "WR_RECEPTIONS",
+        "WR_TDS",
     ],
-    "CULINARY_ANTHROPOLOGY": [
-        "STADIUM_CONCESSION_SALES_VELOCITY",
-        "AVOCADO_TOAST_AVAILABILITY",
-        "LOCAL_DELICACY_PROMINENCE",
-        "CELEBRITY_CHEF_SIGHTINGS",
-        "PLAYER_FAMILY_MEAL_VISIBILITY",
-        "COACHING_STAFF_SNACK_PREFERENCES",
-        "PRESS_BOX_FOOD_QUALITY_RUMORS",
-        "STADIUM_BEER_BRAND_DOMINANCE",
+    "PENALTIES": [
+        "TOTAL_PENALTIES_OVER_UNDER_10",
+        "PENALTY_YARDS",
+        "PENALTY_ON_FIRST_PLAY",
+    ],
+    "GAME_TOTALS": [
+        "TOTAL_POINTS_OVER_UNDER_48",
+        "TOTAL_POINTS_OVER_UNDER_51",
+        "TOTAL_TDS_OVER_UNDER_6",
     ],
     "TRADITIONAL": [
         "QB_PASS_YARDS",
@@ -198,19 +159,20 @@ ULTRA_RARE_BET_CATEGORIES: Dict[str, List[str]] = {
 
 CATEGORY_PROFILES = {
     "TRADITIONAL": {"prob_mean": 0.52, "prob_std": 0.07, "liquidity_mean": 0.7},
-    "NATIONAL_ANTHEM_PROPERTIES": {"prob_mean": 0.35, "prob_std": 0.10, "liquidity_mean": 0.25},
-    "HALFTIME_ESOTERICA": {"prob_mean": 0.30, "prob_std": 0.10, "liquidity_mean": 0.22},
-    "GATORADE_ONTOLOGY": {"prob_mean": 0.38, "prob_std": 0.09, "liquidity_mean": 0.30},
-    "COIN_TOSS_QUANTUM": {"prob_mean": 0.50, "prob_std": 0.08, "liquidity_mean": 0.40},
-    "MATHEMATICAL_CURIOSITIES": {"prob_mean": 0.28, "prob_std": 0.10, "liquidity_mean": 0.20},
-    "PSYCHIC_PHENOMENA": {"prob_mean": 0.26, "prob_std": 0.10, "liquidity_mean": 0.18},
-    "ASTROLOGICAL_ALIGNMENTS": {"prob_mean": 0.24, "prob_std": 0.10, "liquidity_mean": 0.16},
-    "QUANTUM_ENTANGLEMENT_PROPS": {"prob_mean": 0.27, "prob_std": 0.10, "liquidity_mean": 0.18},
-    "NEUROAESTHETIC_PROPS": {"prob_mean": 0.29, "prob_std": 0.10, "liquidity_mean": 0.21},
-    "BIOMETRIC_ANOMALIES": {"prob_mean": 0.31, "prob_std": 0.10, "liquidity_mean": 0.23},
-    "TEMPORAL_PARADOX_PROPS": {"prob_mean": 0.25, "prob_std": 0.10, "liquidity_mean": 0.17},
-    "TECHNOLOGICAL_GLITCH_PROPS": {"prob_mean": 0.23, "prob_std": 0.10, "liquidity_mean": 0.15},
-    "CULINARY_ANTHROPOLOGY": {"prob_mean": 0.32, "prob_std": 0.10, "liquidity_mean": 0.24},
+    "COIN_TOSS": {"prob_mean": 0.50, "prob_std": 0.08, "liquidity_mean": 0.25},
+    "NATIONAL_ANTHEM": {"prob_mean": 0.35, "prob_std": 0.10, "liquidity_mean": 0.20},
+    "GATORADE_SHOWER": {"prob_mean": 0.38, "prob_std": 0.09, "liquidity_mean": 0.22},
+    "GAME_OUTCOME": {"prob_mean": 0.45, "prob_std": 0.08, "liquidity_mean": 0.35},
+    "SCORING": {"prob_mean": 0.48, "prob_std": 0.08, "liquidity_mean": 0.40},
+    "SPECIAL_TEAMS": {"prob_mean": 0.42, "prob_std": 0.09, "liquidity_mean": 0.30},
+    "TURNOVERS": {"prob_mean": 0.40, "prob_std": 0.09, "liquidity_mean": 0.32},
+    "MVP_POSITION": {"prob_mean": 0.35, "prob_std": 0.10, "liquidity_mean": 0.28},
+    "HALFTIME_SHOW": {"prob_mean": 0.30, "prob_std": 0.10, "liquidity_mean": 0.18},
+    "PLAYER_PROPS_QB": {"prob_mean": 0.50, "prob_std": 0.07, "liquidity_mean": 0.65},
+    "PLAYER_PROPS_RB": {"prob_mean": 0.48, "prob_std": 0.08, "liquidity_mean": 0.55},
+    "PLAYER_PROPS_WR": {"prob_mean": 0.47, "prob_std": 0.08, "liquidity_mean": 0.58},
+    "PENALTIES": {"prob_mean": 0.45, "prob_std": 0.08, "liquidity_mean": 0.38},
+    "GAME_TOTALS": {"prob_mean": 0.50, "prob_std": 0.07, "liquidity_mean": 0.70},
 }
 
 
@@ -283,7 +245,7 @@ class QuantumSeekerFramework:
         years = self.years
 
         game_contexts = self._build_game_contexts(years)
-        all_types = [bt for cat, bts in ULTRA_RARE_BET_CATEGORIES.items() for bt in bts]
+        all_types = [bt for cat, bts in REAL_SB_PROP_CATEGORIES.items() for bt in bts]
 
         LOGGER.info("Generating %s synthetic bet legs...", num_legs)
         for _ in range(num_legs):
@@ -353,35 +315,76 @@ class QuantumSeekerFramework:
         adjustment = 0.0
 
         if category in {
-            "NATIONAL_ANTHEM_PROPERTIES",
-            "HALFTIME_ESOTERICA",
-            "CULINARY_ANTHROPOLOGY",
+            "NATIONAL_ANTHEM",
+            "HALFTIME_SHOW",
+            "GATORADE_SHOWER",
         }:
             adjustment += context["ceremony_index"] * 0.03
-        if category in {"COIN_TOSS_QUANTUM"}:
+        if category in {"COIN_TOSS"}:
             adjustment += context["coin_bias"] * 0.05
-        if "GATORADE_COLOR" in bet_type or category == "GATORADE_ONTOLOGY":
+        if "GATORADE_COLOR" in bet_type or category == "GATORADE_SHOWER":
             adjustment += context["color_bias"] * 0.04
-        if bet_type in {"TOTAL_POINTS", "POINT_SPREAD", "QB_PASS_YARDS", "RB_RUSH_YARDS"}:
+        if bet_type in {"TOTAL_POINTS", "POINT_SPREAD", "QB_PASS_YARDS", "RB_RUSH_YARDS", "GAME_TOTALS"}:
             adjustment += context["offense_strength"] * 0.04
-        if category in {"TECHNOLOGICAL_GLITCH_PROPS"}:
+        if category in {"GAME_OUTCOME", "SCORING", "TURNOVERS"}:
             adjustment += context["variance"] * 0.02
 
         return float(np.clip(implied_prob + adjustment, 0.02, 0.98))
 
     def _gen_selection(self, bet_type: str) -> str:
-        if "OVER" in bet_type or "DURATION" in bet_type:
-            return f"OVER_{self.rng.integers(1, 100)}.5"
-        if "COLOR" in bet_type:
-            return str(self.rng.choice(["ORANGE", "YELLOW", "BLUE", "CLEAR", "GREEN"]))
-        if "OUTCOME" in bet_type:
-            return str(self.rng.choice(["HEADS", "TAILS"]))
+        if "OVER_UNDER" in bet_type or "DURATION" in bet_type:
+            if "95" in bet_type:
+                return str(self.rng.choice(["OVER_95", "UNDER_95"]))
+            elif "100" in bet_type:
+                return str(self.rng.choice(["OVER_100", "UNDER_100"]))
+            elif "105" in bet_type:
+                return str(self.rng.choice(["OVER_105", "UNDER_105"]))
+            elif "48" in bet_type:
+                return str(self.rng.choice(["OVER_48", "UNDER_48"]))
+            elif "51" in bet_type:
+                return str(self.rng.choice(["OVER_51", "UNDER_51"]))
+            elif "6" in bet_type:
+                return str(self.rng.choice(["OVER_6", "UNDER_6"]))
+            elif "3" in bet_type:
+                return str(self.rng.choice(["OVER_3", "UNDER_3"]))
+            elif "10" in bet_type:
+                return str(self.rng.choice(["OVER_10", "UNDER_10"]))
+            elif "45" in bet_type:
+                return str(self.rng.choice(["OVER_45", "UNDER_45"]))
+            else:
+                return f"OVER_{self.rng.integers(1, 100)}.5"
+        if "GATORADE_COLOR" in bet_type:
+            return str(self.rng.choice(["ORANGE", "YELLOW", "BLUE", "CLEAR", "RED", "GREEN", "PURPLE", "NONE"]))
+        if "COIN_TOSS" in bet_type:
+            if "HEADS_TAILS" in bet_type:
+                return str(self.rng.choice(["HEADS", "TAILS"]))
+            elif "DEFERS" in bet_type:
+                return str(self.rng.choice(["DEFERS", "RECEIVES"]))
+            elif "RECEIVES" in bet_type:
+                return str(self.rng.choice(["RECEIVES", "DEFERS"]))
+        if "FIRST_SCORE" in bet_type:
+            return str(self.rng.choice(["TD", "FG", "SAFETY"]))
+        if "LAST_SCORE" in bet_type:
+            return str(self.rng.choice(["TD", "FG"]))
+        if "OVERTIME" in bet_type:
+            return str(self.rng.choice(["YES", "NO"]))
+        if "SAFETY" in bet_type and "GAME" in bet_type:
+            return str(self.rng.choice(["YES", "NO"]))
+        if "MVP" in bet_type:
+            return str(self.rng.choice(["QB", "RB", "WR", "TE", "DEFENSIVE", "KICKER"]))
+        if "HALFTIME" in bet_type:
+            if "FIRST_SONG" in bet_type:
+                return str(self.rng.choice(["SONG_1", "SONG_2", "SONG_3"]))
+            elif "SPECIAL_GUEST" in bet_type:
+                return str(self.rng.choice(["YES", "NO"]))
+            elif "OUTFIT_COLOR" in bet_type:
+                return str(self.rng.choice(["RED", "BLUE", "BLACK", "WHITE", "GOLD"]))
         if "WINNER" in bet_type:
             return str(self.rng.choice(["HOME", "AWAY"]))
         return f"SELECTION_{self.rng.integers(1, 5)}"
 
     def _categorize(self, bet_type: str) -> str:
-        for cat, bets in ULTRA_RARE_BET_CATEGORIES.items():
+        for cat, bets in REAL_SB_PROP_CATEGORIES.items():
             if bet_type in bets:
                 return cat
         return "TRADITIONAL"
@@ -616,16 +619,20 @@ class QuantumSeekerFramework:
     def _explain(self, perf: Dict) -> str:
         explanations = []
         for leg_type, _ in perf["legs"]:
-            if "PRIME" in leg_type:
-                explanations.append("Prime numbers align with scoring constraints")
-            elif "FIBONACCI" in leg_type:
-                explanations.append("Fibonacci patterns appear in sequential scoring")
-            elif "ANTHEM" in leg_type and "FIRST" in leg_type:
-                explanations.append("Opening word bias observed in anthem performances")
-            elif "GATORADE_VISCOSITY" in leg_type:
-                explanations.append("Weather conditions shift Gatorade viscosity")
-            elif "COIN_TOSS_AIR" in leg_type:
-                explanations.append("Coin toss air time clusters within a narrow band")
+            if "ANTHEM" in leg_type and "DURATION" in leg_type:
+                explanations.append("Anthem duration shows historical patterns")
+            elif "GATORADE_COLOR" in leg_type:
+                explanations.append("Gatorade color selection follows team traditions")
+            elif "COIN_TOSS" in leg_type:
+                explanations.append("Coin toss outcomes show statistical balance")
+            elif "FIRST_SCORE" in leg_type:
+                explanations.append("First score type correlates with team strategy")
+            elif "MVP" in leg_type:
+                explanations.append("MVP position reflects game flow patterns")
+            elif "HALFTIME" in leg_type:
+                explanations.append("Halftime show props show performer patterns")
+            elif "OVERTIME" in leg_type or "SAFETY" in leg_type:
+                explanations.append("Rare game events show value in low-liquidity markets")
             else:
                 explanations.append("Low-liquidity markets show mispricing")
         return " | ".join(explanations[:3])
@@ -883,14 +890,14 @@ class QuantumSeekerFramework:
         report.append("ACTIONABLE RECOMMENDATIONS")
         report.append("-" * 80)
         recommendations = [
-            "Allocate more exposure to low-liquidity ceremonial and mathematical bets.",
-            "Exploit temporal trends for periods with higher average ROI.",
-            "Build parlays with cross-category synergies to reduce variance.",
-            "Use round robin formats for diversification and smoother returns.",
-            "Monitor live lines for anthem, coin toss, and Gatorade deviations.",
-            "Track recurring numeric patterns (prime, Fibonacci) across markets.",
-            "Prioritize inefficiencies with high sample sizes and consistency.",
-            "Document observations to build a persistent edge database.",
+            "1. Focus on LOW-LIQUIDITY props: Anthem duration, Gatorade color, coin toss",
+            "2. Build 2-3 leg parlays mixing CEREMONIAL + GAME props",
+            "3. Best combos: Anthem + First Score, Coin Toss + Safety, Gatorade + Overtime",
+            "4. Use ROUND ROBIN formats to diversify (picks 4 legs, bet all 2-leg combos)",
+            "5. Target props with HIGH OBSCURITY: MVP position, halftime guest, special teams",
+            "6. Avoid correlated bets (don't parlay QB yards with QB TDs)",
+            "7. Line shop across DraftKings, FanDuel, Caesars for best odds",
+            "8. Track historical patterns: Gatorade orange hits 40%, Anthem usually OVER",
         ]
         report.extend([f"- {rec}" for rec in recommendations])
         report.append("")
@@ -993,7 +1000,7 @@ class QuantumSeekerFramework:
         synergies = self.quantum_results.get("synergies", [])
         if not synergies:
             return None
-        categories = list(ULTRA_RARE_BET_CATEGORIES.keys())
+        categories = list(REAL_SB_PROP_CATEGORIES.keys())
         matrix = pd.DataFrame(0.0, index=categories, columns=categories)
         counts = pd.DataFrame(0, index=categories, columns=categories)
 

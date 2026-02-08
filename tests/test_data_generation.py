@@ -20,6 +20,29 @@ class TestDataGeneration(unittest.TestCase):
             self.assertTrue(0.0 <= leg.liquidity_score <= 1.0)
             self.assertTrue(leg.bookmaker_count >= 1)
 
+    def test_year_range_inclusive_and_validated(self) -> None:
+        config = {
+            "random_seed": 7,
+            "num_legs": 20,
+            "year_start": 2024,
+            "year_end": 2024,
+            "max_parlays_analyzed": 5,
+            "monte_carlo_sims": 5,
+        }
+        framework = QuantumSeekerFramework(config=config)
+        self.assertTrue(all(leg.season_year == 2024 for leg in framework.bet_legs))
+
+        with self.assertRaises(ValueError):
+            QuantumSeekerFramework(
+                config={
+                    "num_legs": 5,
+                    "year_start": 2025,
+                    "year_end": 2024,
+                    "monte_carlo_sims": 5,
+                    "max_parlays_analyzed": 2,
+                }
+            )
+
 
 if __name__ == "__main__":
     unittest.main()

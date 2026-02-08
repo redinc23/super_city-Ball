@@ -22,12 +22,20 @@ Quantum Seeker 2.0 is a Super Bowl betting analysis framework that generates syn
 See `LOCAL_SETUP.md` for detailed instructions.
 
 ## Quick Start (Google Colab)
+**Option A (recommended): one-cell bootstrap**
+
+```bash
+!curl -sSL https://raw.githubusercontent.com/OWNER/REPO/main/colab_bootstrap.sh | \
+  bash -s -- --repo https://github.com/OWNER/REPO.git
+```
+
+**Option B: notebook upload flow**
 1. Open `Quantum_Seeker_2.0.ipynb` in Colab.
 2. Run the install cell.
 3. Upload `quantum_seeker_v2.py` and optional `config.json`.
 4. Execute the analysis cell.
 
-See `COLAB_SETUP.md` for details.
+See `COLAB_SETUP.md` for more details and options.
 
 ## Outputs
 Default outputs in `output/`:

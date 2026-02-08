@@ -245,7 +245,7 @@ class QuantumSeekerFramework:
         years = self.years
 
         game_contexts = self._build_game_contexts(years)
-        all_types = [bt for cat, bts in REAL_SB_PROP_CATEGORIES.items() for bt in bts]
+        all_types = list(dict.fromkeys([bt for cat, bts in REAL_SB_PROP_CATEGORIES.items() for bt in bts]))
 
         LOGGER.info("Generating %s synthetic bet legs...", num_legs)
         for _ in range(num_legs):
@@ -324,7 +324,7 @@ class QuantumSeekerFramework:
             adjustment += context["coin_bias"] * 0.05
         if "GATORADE_COLOR" in bet_type or category == "GATORADE_SHOWER":
             adjustment += context["color_bias"] * 0.04
-        if bet_type in {"TOTAL_POINTS", "POINT_SPREAD", "QB_PASS_YARDS", "RB_RUSH_YARDS", "GAME_TOTALS"}:
+        if bet_type in {"TOTAL_POINTS", "POINT_SPREAD", "QB_PASS_YARDS", "RB_RUSH_YARDS"} or category == "GAME_TOTALS":
             adjustment += context["offense_strength"] * 0.04
         if category in {"GAME_OUTCOME", "SCORING", "TURNOVERS"}:
             adjustment += context["variance"] * 0.02
@@ -354,6 +354,9 @@ class QuantumSeekerFramework:
             else:
                 return f"OVER_{self.rng.integers(1, 100)}.5"
         if "GATORADE_COLOR" in bet_type:
+            # Extract color from bet type name (e.g., GATORADE_COLOR_ORANGE -> ORANGE)
+            if bet_type.startswith("GATORADE_COLOR_"):
+                return bet_type.replace("GATORADE_COLOR_", "")
             return str(self.rng.choice(["ORANGE", "YELLOW", "BLUE", "CLEAR", "RED", "GREEN", "PURPLE", "NONE"]))
         if "COIN_TOSS" in bet_type:
             if "HEADS_TAILS" in bet_type:
@@ -363,24 +366,51 @@ class QuantumSeekerFramework:
             elif "RECEIVES" in bet_type:
                 return str(self.rng.choice(["RECEIVES", "DEFERS"]))
         if "FIRST_SCORE" in bet_type:
+            # Extract score type from bet type name (e.g., FIRST_SCORE_TD -> TD)
+            if bet_type.startswith("FIRST_SCORE_"):
+                return bet_type.replace("FIRST_SCORE_", "")
             return str(self.rng.choice(["TD", "FG", "SAFETY"]))
         if "LAST_SCORE" in bet_type:
+            # Extract score type from bet type name (e.g., LAST_SCORE_TD -> TD)
+            if bet_type.startswith("LAST_SCORE_"):
+                return bet_type.replace("LAST_SCORE_", "")
             return str(self.rng.choice(["TD", "FG"]))
         if "OVERTIME" in bet_type:
+            # Extract YES/NO from bet type name (e.g., GAME_OVERTIME_YES -> YES)
+            if bet_type.endswith("_YES"):
+                return "YES"
+            elif bet_type.endswith("_NO"):
+                return "NO"
             return str(self.rng.choice(["YES", "NO"]))
         if "SAFETY" in bet_type and "GAME" in bet_type:
+            # Extract YES/NO from bet type name (e.g., GAME_SAFETY_YES -> YES)
+            if bet_type.endswith("_YES"):
+                return "YES"
+            elif bet_type.endswith("_NO"):
+                return "NO"
             return str(self.rng.choice(["YES", "NO"]))
         if "MVP" in bet_type:
+            # Extract position from bet type name (e.g., MVP_QB -> QB)
+            if bet_type.startswith("MVP_"):
+                return bet_type.replace("MVP_", "")
             return str(self.rng.choice(["QB", "RB", "WR", "TE", "DEFENSIVE", "KICKER"]))
         if "HALFTIME" in bet_type:
             if "FIRST_SONG" in bet_type:
                 return str(self.rng.choice(["SONG_1", "SONG_2", "SONG_3"]))
             elif "SPECIAL_GUEST" in bet_type:
+                # Extract YES/NO from bet type name (e.g., HALFTIME_SPECIAL_GUEST_YES -> YES)
+                if bet_type.endswith("_YES"):
+                    return "YES"
+                elif bet_type.endswith("_NO"):
+                    return "NO"
                 return str(self.rng.choice(["YES", "NO"]))
             elif "OUTFIT_COLOR" in bet_type:
                 return str(self.rng.choice(["RED", "BLUE", "BLACK", "WHITE", "GOLD"]))
         if "WINNER" in bet_type:
             return str(self.rng.choice(["HOME", "AWAY"]))
+        # Handle GAME_MISSED_XP and GAME_SUCCESSFUL_2PT as binary YES/NO bets
+        if bet_type == "GAME_MISSED_XP" or bet_type == "GAME_SUCCESSFUL_2PT":
+            return "YES"
         return f"SELECTION_{self.rng.integers(1, 5)}"
 
     def _categorize(self, bet_type: str) -> str:

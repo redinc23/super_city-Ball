@@ -17,6 +17,9 @@
    - `pip install -r requirements.txt`
 
 ## Run the analysis
+Fire up the app (runs analysis and starts report server):
+- `./fire_up.sh`
+
 Basic run:
 - `python quantum_seeker_v2.py`
 

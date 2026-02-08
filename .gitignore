@@ -3,6 +3,7 @@ __pycache__/
 *.pyc
 outputs/
 output/
+server.log
 .ipynb_checkpoints/
 *.egg-info/
 dist/

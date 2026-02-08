@@ -15,9 +15,9 @@ Quantum Seeker 2.0 is a Super Bowl betting analysis framework that generates syn
 ## Quick Start (Local)
 1. Install dependencies:
    - `pip install -r requirements.txt`
-2. Run the analysis:
-   - `python quantum_seeker_v2.py`
-3. Results are written to `output/` by default.
+2. Fire up the app (runs analysis and starts report server):
+   - `./fire_up.sh`
+3. View reports at `http://localhost:8000`
 
 See `LOCAL_SETUP.md` for detailed instructions.
 

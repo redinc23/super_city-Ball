@@ -1,0 +1,10 @@
+Generating latest reports...
+2026-02-08 18:30:29,557 INFO Initializing Quantum Seeker 2.0
+2026-02-08 18:30:29,557 INFO Generating 5000 synthetic bet legs...
+2026-02-08 18:30:30,415 INFO Generated 5000 bet legs across 14 Super Bowls
+2026-02-08 18:30:30,509 INFO Win probability model trained with 5000 samples
+2026-02-08 18:30:30,510 INFO Executing full 9-phase analysis
+2026-02-08 18:30:58,884 INFO Report saved to output/quantum_seeker_report.txt
+2026-02-08 18:30:58,884 INFO Results saved to output/quantum_seeker_results.json
+Starting report server at http://localhost:8000
+Press Ctrl+C to stop.

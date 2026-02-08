@@ -1,0 +1,19 @@
+{
+  "random_seed": 42,
+  "num_legs": 5000,
+  "year_start": 2011,
+  "year_end": 2024,
+  "parlay_sizes": [2, 3, 4],
+  "max_parlays_per_size": 1000,
+  "max_parlays_analyzed": 500,
+  "min_categories_in_parlay": 2,
+  "obscure_liquidity_threshold": 0.3,
+  "monte_carlo_sims": 2000,
+  "report_top_n": 10,
+  "q_needle_roi_threshold": 25.0,
+  "q_needle_p_value": 0.02,
+  "g_needle_roi_threshold": 35.0,
+  "g_needle_p_value": 0.01,
+  "g_needle_sharpe": 0.8,
+  "output_dir": "output"
+}

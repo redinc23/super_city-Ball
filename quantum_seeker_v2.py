@@ -257,6 +257,7 @@ class QuantumSeekerFramework:
         self.config = dict(DEFAULT_CONFIG)
         if config:
             self.config.update(config)
+        self.years = self._compute_years()
         self.rng = np.random.default_rng(self.config["random_seed"])
         self.bet_legs: List[BetLeg] = []
         self.quantum_results: Dict = {}
@@ -268,12 +269,17 @@ class QuantumSeekerFramework:
         self._generate_data()
         self._train_win_model()
 
+    def _compute_years(self) -> List[int]:
+        year_start = int(self.config["year_start"])
+        year_end = int(self.config["year_end"])
+        if year_end < year_start:
+            raise ValueError(f"year_end ({year_end}) must be >= year_start ({year_start})")
+        return list(range(year_start, year_end + 1))
+
     def _generate_data(self) -> None:
         """Generate synthetic Super Bowl betting data with realistic patterns."""
         num_legs = int(self.config["num_legs"])
-        year_start = int(self.config["year_start"])
-        year_end = int(self.config["year_end"])
-        years = list(range(year_start, year_end))
+        years = self.years
 
         game_contexts = self._build_game_contexts(years)
         all_types = [bt for cat, bts in ULTRA_RARE_BET_CATEGORIES.items() for bt in bts]
@@ -610,7 +616,7 @@ class QuantumSeekerFramework:
 
     def _temporal_analysis(self, parlays: List[List[BetLeg]]) -> Dict:
         results = {}
-        for year in range(int(self.config["year_start"]), int(self.config["year_end"])):
+        for year in self.years:
             year_parlays = [p for p in parlays if all(leg.season_year == year for leg in p)]
             if not year_parlays:
                 continue

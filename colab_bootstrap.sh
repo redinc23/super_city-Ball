@@ -62,6 +62,16 @@ if [[ -n "$REPO_URL" ]]; then
   fi
   if [[ -d "$TARGET_DIR" ]]; then
     echo "Using existing directory: $TARGET_DIR"
+    if [[ -d "$TARGET_DIR/.git" ]]; then
+      cd "$TARGET_DIR"
+      CURRENT_BRANCH="$(git rev-parse --abbrev-ref HEAD 2>/dev/null || echo "")"
+      if [[ -n "$CURRENT_BRANCH" && "$CURRENT_BRANCH" != "$BRANCH" ]]; then
+        echo "Switching from branch '$CURRENT_BRANCH' to '$BRANCH'"
+        git fetch origin "$BRANCH" 2>/dev/null || true
+        git checkout "$BRANCH" 2>/dev/null || echo "Warning: Could not checkout branch '$BRANCH', using existing branch '$CURRENT_BRANCH'"
+      fi
+      cd - >/dev/null
+    fi
   else
     git clone --depth 1 --branch "$BRANCH" "$REPO_URL" "$TARGET_DIR"
   fi
@@ -96,7 +106,7 @@ if [[ "$SKIP_INSTALL" != "true" ]]; then
 fi
 
 ARGS=()
-if [[ -n "$CONFIG_PATH" ]]; then
+if [[ -n "$CONFIG_PATH" && -f "$CONFIG_PATH" ]]; then
   ARGS+=(--config "$CONFIG_PATH")
 fi
 if [[ -n "$OUTPUT_DIR" ]]; then

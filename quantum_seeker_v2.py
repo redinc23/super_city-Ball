@@ -248,6 +248,7 @@ class BetLeg:
     market_category: str
     liquidity_score: float = 1.0
     bookmaker_count: int = 10
+    predicted_prob: Optional[float] = None
 
 
 class QuantumSeekerFramework:
@@ -416,12 +417,27 @@ class QuantumSeekerFramework:
             model.fit(X_scaled, y)
             self._win_model = model
             LOGGER.info("Win probability model trained with %s samples", len(y))
+
+            # Batch predict probabilities using the already scaled data
+            probs = model.predict_proba(X_scaled)[:, 1]
+            probs = np.clip(probs, 0.02, 0.98)
+
+            if len(probs) != len(self.bet_legs):
+                LOGGER.warning("Mismatch in probability prediction count: %s vs %s", len(probs), len(self.bet_legs))
+
+            for leg, prob in zip(self.bet_legs, probs):
+                leg.predicted_prob = float(prob)
+            LOGGER.info("Cached probabilities for %s legs", len(self.bet_legs))
+
         except Exception as exc:
             LOGGER.warning("Failed to train win model: %s", exc)
             self._win_model = None
             self._scaler = None
 
     def _predict_leg_prob(self, leg: BetLeg) -> float:
+        if leg.predicted_prob is not None:
+            return leg.predicted_prob
+
         if self._win_model is None or self._scaler is None:
             return leg.implied_prob
 

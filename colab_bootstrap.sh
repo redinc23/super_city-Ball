@@ -77,11 +77,21 @@ if [[ ! -f "run_analysis.py" ]]; then
   exit 1
 fi
 
+PYTHON_BIN=""
+if command -v python >/dev/null 2>&1; then
+  PYTHON_BIN="python"
+elif command -v python3 >/dev/null 2>&1; then
+  PYTHON_BIN="python3"
+else
+  echo "Python is not installed. Install Python 3 and retry."
+  exit 1
+fi
+
 if [[ "$SKIP_INSTALL" != "true" ]]; then
   if [[ ! -f "requirements.txt" ]]; then
     echo "requirements.txt not found. Skipping install."
   else
-    python -m pip install -q -r requirements.txt
+    "$PYTHON_BIN" -m pip install -q -r requirements.txt
   fi
 fi
 
@@ -96,7 +106,7 @@ if [[ -n "$RANDOM_SEED" ]]; then
   ARGS+=(--seed "$RANDOM_SEED")
 fi
 
-python run_analysis.py "${ARGS[@]}"
+"$PYTHON_BIN" run_analysis.py "${ARGS[@]}"
 
 resolve_output_dir() {
   if [[ -n "$OUTPUT_DIR" ]]; then
@@ -104,7 +114,7 @@ resolve_output_dir() {
     return
   fi
   if [[ -n "$CONFIG_PATH" && -f "$CONFIG_PATH" ]]; then
-    python - "$CONFIG_PATH" <<'PY'
+    "$PYTHON_BIN" - "$CONFIG_PATH" <<'PY'
 import json
 import sys
 

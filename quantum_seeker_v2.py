@@ -434,7 +434,8 @@ class QuantumSeekerFramework:
             X_scaled = self._scaler.transform(df.values)
             prob = float(self._win_model.predict_proba(X_scaled)[0, 1])
             return float(np.clip(prob, 0.02, 0.98))
-        except Exception:
+        except Exception as exc:
+            LOGGER.warning("Prediction failed, falling back to implied probability: %s", exc)
             return leg.implied_prob
 
     def execute_full_analysis(self) -> Dict:
@@ -550,7 +551,8 @@ class QuantumSeekerFramework:
             try:
                 expected_wins = total_bets * parlay_prob
                 p_binom = stats.binomtest(perf["wins"], total_bets, parlay_prob).pvalue
-            except Exception:
+            except Exception as exc:
+                LOGGER.warning("Binomial test failed, falling back to Monte Carlo p-value: %s", exc)
                 p_binom = p_value
         else:
             p_binom = p_value
